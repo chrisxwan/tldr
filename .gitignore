@@ -1,3 +1,4 @@
 node_modules/
 mongod.lock
 bin/
+bower_components/
