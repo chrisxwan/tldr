@@ -1,5 +1,11 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
+	h1= title
+	form.col-md-offset-4#submit-form(method='POST')
+		.form-group
+			.col-sm-6
+				input.form-control(name='url', id='url', placeholder='Enter the URL of a news article')
+		.form-group
+			.col-sm-7
+				button.btn.styled-button#signupButton(type='submit') tl;dr

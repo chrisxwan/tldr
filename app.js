@@ -1,5 +1,9 @@
 var express = require('express');
+var connectAssets = require('connect-assets');
+var methodOverride = require('method-override');
+var expressValidator = require('express-validator');
 var path = require('path');
+var logger = require('morgan');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -16,15 +20,15 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.use(methodOverride());
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    next();
-});
+//configure express
 
 app.use('/', routes);
 
