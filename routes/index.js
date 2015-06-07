@@ -1,8 +1,7 @@
 var express = require('express');
 var phantom = require('phantom');
-var page = require('webpage').create(),
-    system = require('system'),
-    address;
+var mongoose = require('mongoose');
+var Article = mongoose.model('Article');
 var router = express.Router();
 
 /* GET home page. */
@@ -33,7 +32,7 @@ router.get('/:address', function(req, res) {
                 title: title
             });
         });
-        phantom.exit();
+        ph.exit();
     }
 
     page.onCallback = function(data) {
@@ -42,21 +41,24 @@ router.get('/:address', function(req, res) {
             title: data.title
         });
     }
-
-    page.open(address, function(status) {
-        if(status !== 'success') {
-            res.render('error', {
-                address: req.params.address
+    phantom.create(function(ph) {
+        ph.createPage(function (page) {
+            page.open(address, function(status) {
+                if(status !== 'success') {
+                    res.render('error1', {
+                        address: req.params.address
+                    });
+                    ph.exit();
+                }
+                else {
+                    page.includeJs("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function() {   
+                        tldr();
+                    });
+                }
             });
-            phantom.exit();
-        }
-        else {
-            page.includeJs("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function() {   
-                tldr();
-            });
-        }
-    });
-})
+        });
+    });     
+});
 
 
 module.exports = router;

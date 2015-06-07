@@ -1,3 +1,5 @@
+require('./models/article');
+
 var express = require('express');
 var connectAssets = require('connect-assets');
 var methodOverride = require('method-override');
@@ -6,13 +8,25 @@ var path = require('path');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
+var mongoose = require('mongoose');
+var db = mongoose.connection;
+mongoose.connect('mongodb://localhost/test');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser');
-
+var secrets = require('./config/secrets');
+var bson = require('bson');
 // New Code
 
 var routes = require('./routes/index');
 
 var app = express();
+
+app.use(function(req, res, next) {
+  req.db = {};
+  req.db.objs = db.collection('articles');
+  next();
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,6 +41,15 @@ app.use(methodOverride());
 app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: secrets.sessionSecret,
+  store: new MongoStore({
+    url: secrets.db,
+    auto_reconnect: true
+  })
+}));
 
 //configure express
 

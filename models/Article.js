@@ -10,4 +10,3 @@ var articleSchema = new Schema({
 
 
 module.exports = mongoose.model('Article', articleSchema);
-// mongoose.connect('mongodb://localhost/test');
