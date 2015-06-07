@@ -14,6 +14,10 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
     var address = req.body.url;
+    res.redirect('/' + address);
+});
+
+router.get('/:address', function(req, res) {
     var tldr = function() {
         page.evaluate(function() {
             var sentences = [];
@@ -33,16 +37,16 @@ router.post('/', function(req, res) {
     }
 
     page.onCallback = function(data) {
-        res.render('/' + title, {
-            sentences: sentences,
-            title: title
+        res.render('tldr', {
+            sentences: data.sentences,
+            title: data.title
         });
     }
 
     page.open(address, function(status) {
         if(status !== 'success') {
-            res.render('/error', {
-                address: address
+            res.render('error', {
+                address: req.params.address
             });
             phantom.exit();
         }
