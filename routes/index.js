@@ -1,4 +1,5 @@
 var express = require('express');
+var async = require('async');
 var phantom = require('phantom');
 var mongoose = require('mongoose');
 var Article = mongoose.model('Article');
@@ -21,37 +22,45 @@ router.post('/', function(req, res) {
                 }
                 else {
                     page.includeJs("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function() {   
-                        var sentences;
-                        page.evaluate(function(){ 
-                            var returnSentences = [];
-                            $('p').each(function() {
-                                var paragraph = $(this).text();
-                                var period = paragraph.indexOf('.');
-                                var sentence = paragraph.substring(0, period + 1);
-                                returnSentences.push(sentence);
-                            });
-                            return returnSentences;
-                        }, function(result) {
-                            sentences = result;
-                        });
-                        var title;
-                        page.evaluate(function() {
-                            return $('title').text();
-                        }, function(result) {
-                            title = result;
-                        });
-                        var newArticle = new Article({
-                            address: address,
-                            title: title,
-                            sentences: sentences
-                        });
-                        newArticle.save(function (err) {
-                            if(err) {
-                                res.send('There was a problem adding to the database.');
+                        async.series([
+                            var sentences;
+                            var title;
+                            function (callback) {
+                                page.evaluate(function(){ 
+                                    var returnSentences = [];
+                                    $('p').each(function() {
+                                        var paragraph = $(this).text();
+                                        var period = paragraph.indexOf('.');
+                                        var sentence = paragraph.substring(0, period + 1);
+                                        returnSentences.push(sentence);
+                                    });
+                                    return returnSentences;
+                                }, function(result) {
+                                    sentences = result;
+                                });    
+                                page.evaluate(function() {
+                                    return $('title').text();
+                                }, function(result) {
+                                    title = result;
+                                });
+                                callback('failed to crawl', 'successfully crawled');                            
+                            },
+                            function (callback) {
+                                var newArticle = new Article({
+                                    address: address,
+                                    title: title,
+                                    sentences: sentences
+                                });
+                                newArticle.save(function (err) {
+                                    if(err) {
+                                        res.send('There was a problem adding to the database.');
+                                    }
+                                });    
+                                res.redirect('/' + title);
+                                ph.exit();
+                                callback('failed to write to db', 'successfully pushed to db');                            
                             }
-                        });
-                        res.redirect('/' + title);
-                        ph.exit();
+                        ]);
                     });
                 }
             });
