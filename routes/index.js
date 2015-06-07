@@ -13,52 +13,66 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
     var address = req.body.url;
-    res.redirect('/' + address);
-});
-
-router.get('/:address', function(req, res) {
-    var tldr = function() {
-        page.evaluate(function() {
-            var sentences = [];
-            $('p').each(function() {
-                var paragraph = $(this).text();
-                var period = paragraph.indexOf('.');
-                var sentence = paragraph.substring(0, period + 1);
-                sentences.push(sentence);
-            });
-            var title = $('title').text();
-            window.callPhantom({
-                sentences: sentences,
-                title: title
-            });
-        });
-        ph.exit();
-    }
-
-    page.onCallback = function(data) {
-        res.render('tldr', {
-            sentences: data.sentences,
-            title: data.title
-        });
-    }
     phantom.create(function(ph) {
         ph.createPage(function (page) {
             page.open(address, function(status) {
                 if(status !== 'success') {
-                    res.render('error1', {
-                        address: req.params.address
-                    });
-                    ph.exit();
+                    res.redirect('/error');
                 }
                 else {
                     page.includeJs("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function() {   
-                        tldr();
+                        var sentences;
+                        page.evaluate(function(){ 
+                            var returnSentences = [];
+                            $('p').each(function() {
+                                var paragraph = $(this).text();
+                                var period = paragraph.indexOf('.');
+                                var sentence = paragraph.substring(0, period + 1);
+                                returnSentences.push(sentence);
+                            });
+                            return returnSentences;
+                        }, function(result) {
+                            sentences = result;
+                        });
+                        var title;
+                        page.evaluate(function() {
+                            return $('title').text();
+                        }, function(result) {
+                            title = result;
+                        });
+                        var newArticle = new Article({
+                            address: address,
+                            title: title,
+                            sentences: sentences
+                        });
+                        newArticle.save(function (err) {
+                            if(err) {
+                                res.send('There was a problem adding to the database.');
+                            }
+                        });
+                        res.redirect('/' + title);
+                        ph.exit();
                     });
                 }
             });
         });
-    });     
+    });
 });
+
+router.get('/error', function(req, res){
+    res.render('error');
+})
+
+router.get('/:title', function(req, res) {
+    req.db.articles.findOne({'title': req.params.title}, function (error, article) {
+        res.render('tldr', {
+            address: article.address,
+            title: article.title,
+            sentences: article.sentences
+        });
+    });
+});   
+
 
 
 module.exports = router;

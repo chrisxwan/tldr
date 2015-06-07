@@ -2,7 +2,7 @@ extends layout
 
 block content
 	h1= title
-	form.col-md-offset-4#submit-form(method='POST')
+	form.col-md-offset-4#submit-form(method='POST', action='/')
 		.form-group
 			.col-sm-6
 				input.form-control(name='url', id='url', placeholder='Enter the URL of a news article')

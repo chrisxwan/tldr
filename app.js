@@ -24,7 +24,7 @@ var app = express();
 
 app.use(function(req, res, next) {
   req.db = {};
-  req.db.objs = db.collection('articles');
+  req.db.articles = db.collection('articles');
   next();
 })
 
