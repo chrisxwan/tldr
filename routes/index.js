@@ -18,6 +18,7 @@ router.post('/', function(req, res) {
         ph.createPage(function (page) {
             page.open(address, function(status) {
                 if(status !== 'success') {
+                    console.log('error');
                     res.redirect('/error');
                 }
                 else {
@@ -80,7 +81,8 @@ router.get('/error', function(req, res){
 })
 
 router.get('/article:title', function(req, res) {
-    req.db.articles.findOne({'title': req.params.title}, function (error, article) {
+    req.db.article.findOne({title: req.params.title}, function (error, article) {
+        console.log(article.address);
         res.render('tldr', {
             address: article.address,
             articleTitle: article.title,
