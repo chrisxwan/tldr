@@ -22,10 +22,9 @@ router.post('/', function(req, res) {
                 }
                 else {
                     page.includeJs("http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function() {   
-                        async.series([
-                            var sentences;
-                            var title;
+                        async.waterfall([
                             function (callback) {
+                                var sentences;
                                 page.evaluate(function(){ 
                                     var returnSentences = [];
                                     $('p').each(function() {
@@ -35,17 +34,22 @@ router.post('/', function(req, res) {
                                         returnSentences.push(sentence);
                                     });
                                     return returnSentences;
-                                }, function(result) {
+                                }, function (result) {
                                     sentences = result;
-                                });    
+                                    callback(null, sentences);
+                                });
+                            },
+                            function (sentences, callback) {
+                                var title;
                                 page.evaluate(function() {
                                     return $('title').text();
-                                }, function(result) {
+                                }, function (result) {
                                     title = result;
-                                });
-                                callback('failed to crawl', 'successfully crawled');                            
+                                    callback(null, sentences, title);
+                                }); 
+                                
                             },
-                            function (callback) {
+                            function (sentences, title, callback) {
                                 var newArticle = new Article({
                                     address: address,
                                     title: title,
@@ -56,11 +60,14 @@ router.post('/', function(req, res) {
                                         res.send('There was a problem adding to the database.');
                                     }
                                 });    
-                                res.redirect('/' + title);
-                                ph.exit();
-                                callback('failed to write to db', 'successfully pushed to db');                            
+                                res.redirect('/article' + title);
+                                ph.exit();    
+                                callback(null, 'done');                       
                             }
-                        ]);
+                        ], 
+                        function (err, results) {
+                            if (err) { console.log(err); }
+                        });
                     });
                 }
             });
@@ -72,11 +79,11 @@ router.get('/error', function(req, res){
     res.render('error');
 })
 
-router.get('/:title', function(req, res) {
+router.get('/article:title', function(req, res) {
     req.db.articles.findOne({'title': req.params.title}, function (error, article) {
         res.render('tldr', {
             address: article.address,
-            title: article.title,
+            articleTitle: article.title,
             sentences: article.sentences
         });
     });
