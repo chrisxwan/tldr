@@ -4,3 +4,4 @@ bin/
 bower_components/
 config/
 build/
+public/img/

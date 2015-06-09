@@ -1,11 +1,14 @@
 extends layout
 
 block content
-	h1= title
-	form.col-md-offset-4#submit-form(method='POST', action='/')
-		.form-group
-			.col-sm-6
-				input.form-control(name='url', id='url', placeholder='Enter the URL of a news article')
-		.form-group
-			.col-sm-7
-				button.btn.styled-button#signupButton(type='submit') tl;dr
+	header
+		.front-container
+			h1= title
+			form.col-sm-offset-3#submit-form(method='POST', action='/')
+				.form-group
+					.col-sm-9
+						input.form-control(name='url', id='url', placeholder='Enter the URL of a news article')
+				.form-group
+					.col-sm-9.button-holder
+						button.btn.styled-button#signupButton(type='submit') 
+							b tl;dr me

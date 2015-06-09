@@ -1,17 +1,76 @@
-body {
-	padding: 50px;
-	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@import url('http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300italic,400italic');
+
+html {
+	font-family: 'Avenir';
 }
 
-a {
-	color: #00B7FF;
+body {
+	font: 14px "Avenir", Helvetica, Arial, sans-serif;
+}
+
+header{
+	min-width: 1000px;
+	padding: 150px 250px 180px 250px;
+	top: 0;
+	width: 100%;
+	background: url('../img/newspaper-collage.jpg') center center fixed;
+}
+
+button{
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	margin-top: 10px;
+	padding: 4px !important;
+	border-radius: 2px !important;
+	-moz-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;	
+    font-weight: bold;
+    color: #FAFAFA;
+    background-color: #575757;
+
+}
+
+button:hover {
+    background-color: white;
+    color: red;
+/*    border: 1px rgba(39, 174, 96, 0.8);*/
+}
+
+form{
+	margin-top: 30px;
 }
 
 h1{
+	font-size: 54px;
+	color: white;
 	text-align: center;
 
 }
 
-#submit-form{
+input{
+	padding: 18px 15px 18px 8px !important;
+	border-radius: 2px !important;
+}
 
+.front-container{
+	padding: 10px 10px 60px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	background-color: rgba(0,0,0, 0.7);
+	border-radius: 10px;
+}
+
+.form-group{
+	clear:both;
+}
+
+@media (min-width: 768px) {
+	.col-sm-offset-3 {
+		margin-left: 22% !important;
+	}
 }
