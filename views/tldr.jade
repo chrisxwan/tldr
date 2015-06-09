@@ -1,7 +1,7 @@
 extends layout
 
-body
+block content
 	h1 tl;dr
-	h2 #{articleTitle}
-	each sentence in #{sentences}
-		p= sentence
+	h2= articleTitle
+	each sentence in sentences
+		p #{sentence}
