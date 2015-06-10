@@ -69,6 +69,20 @@ input{
 	clear:both;
 }
 
+#about{
+	padding: 20px 200px 50px 200px;
+
+}
+
+#about > h2 {
+	text-align: center;
+	font-size: 40px;
+}
+
+#about > p {
+	font-size: 16px;
+}
+
 @media (min-width: 768px) {
 	.col-sm-offset-3 {
 		margin-left: 22% !important;
