@@ -5,6 +5,11 @@ var mongoose = require('mongoose');
 var Article = mongoose.model('Article');
 var router = express.Router();
 
+var abbreviations = ['Mr.', 'Sr.', 'Ms.', 'Jr.', 'Prof.', 'Gen.', 'Rep.', 'Sen.', 'Mrs.',
+                     'Ph.D.', 'M.D.', 'B.A.', 'M.A.', 'D.D.S.', 'in.', 'ft.', 
+                     'a.m.', 'p.m.', 'U.S.', 'etc.', 'i.e.', 'al.', 'e.g.', 
+                     'B.C.', 'A.D.', 'C.E.', 'A.M.', 'P.M.', 'D.C.', 'Lt.', 'Col.'];
+
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', {
