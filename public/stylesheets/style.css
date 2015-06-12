@@ -69,6 +69,24 @@ input{
 	clear:both;
 }
 
+.article-body {
+	padding: 20px 220px 10px 220px;
+}
+
+.article-title {
+	text-align: center;
+}
+
+.article-head {
+	color: black;
+}
+
+.article-body > p {
+	font-size: 16px;
+	margin-bottom: 15px;
+	line-height: 18px;
+}
+
 #about{
 	padding: 20px 200px 50px 200px;
 
