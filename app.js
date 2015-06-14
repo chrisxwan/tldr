@@ -10,7 +10,7 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://heroku_t5znxb3q:ivbrd89fr79t5hl500m1eu0lbo@ds047802.mongolab.com:47802/heroku_t5znxb3q');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser');
