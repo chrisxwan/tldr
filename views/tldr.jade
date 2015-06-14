@@ -1,8 +1,11 @@
 extends layout
 
 block content
-	h1.article-head tl;dr
+	.article-head
+		a(href="/") tl;dr
 	h2.article-title #{articleTitle}
 	.article-body
 		each sentence in sentences
 			p #{sentence}
+	.article-footer
+		a(href="/") Back

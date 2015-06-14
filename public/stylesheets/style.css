@@ -78,7 +78,30 @@ input{
 }
 
 .article-head {
+	text-align: center;
+	font-size: 54px;
+}
+
+.article-head > a {
 	color: black;
+}
+
+.article-head > a:hover {
+	text-decoration: none;
+}
+
+.article-footer {
+	padding-bottom: 20px;
+	text-align: center;
+	font-size: 20px;
+}
+
+.article-footer > a {
+	color: black;
+}
+
+.article-footer > a:hover{
+	text-decoration: none;
 }
 
 .article-body > p {

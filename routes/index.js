@@ -122,6 +122,7 @@ router.get('/error', function(req, res){
 router.get('/article:id', function(req, res) {
     Article.findById(req.params.id, function (error, article) {
         res.render('tldr', {
+            title: article.title,
             address: article.address,
             articleTitle: article.title,
             sentences: article.sentences
