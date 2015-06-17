@@ -32,7 +32,7 @@ router.post('/', function(req, res) {
                                     function (callback) {
                                         page.evaluate(function(){ 
                                             var abbreviations = ['Mr.', 'Sr.', 'Ms.', 'Jr.', 'Prof.', 'Gen.', 'Rep.', 'Sen.', 'Mrs.',
-                                                                 'Ph.D.', 'M.D.', 'B.A.', 'M.A.', 'in.', 'ft.', 
+                                                                 'Ph.D.', 'M.D.', 'B.A.', 'M.A.', 'in.', 'ft.', "F.B.I."
                                                                  'a.m.', 'p.m.', 'U.S.', 'etc.', 'i.e.', 'al.', 'e.g.', 
                                                                  'B.C.', 'A.D.', 'C.E.', 'A.M.', 'P.M.', 'D.C.', 'Lt.', 'Col.'];
                                             var nth_occurrence = function (string, char, nth) {
